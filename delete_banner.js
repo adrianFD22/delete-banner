@@ -8,38 +8,41 @@
 //      General banners
 //---------------------------
 
-// Delete fixed and sticky elements
-var list_of_banners = document.querySelectorAll("body *");
+var banner_patterns = ["cookie", "Cookie"];
+var banner_containers_patterns = ["popup"];
 
-list_of_banners.forEach(banner => {
-    var pos = getComputedStyle(banner).position;
+var list_of_elements = document.querySelectorAll("body *");
+
+list_of_elements.forEach( element => {
+
+    // Delete fixed and sticky elements
+    var pos = getComputedStyle(element).position;
 
     if (pos === "fixed" || pos == "sticky") {
-        banner.remove();
+        element.remove();
     }
+
+    // Remove banners by identifier
+    banner_patterns.forEach( pattern => {
+        var regex = new RegExp(pattern);
+        if (regex.test(element.id)) {
+            element.remove();
+        }
+    });
+
+    // Remove classnames that make banner containers
+    var list_of_class_names = element.classList;
+
+    list_of_class_names.forEach( class_name => {
+        banner_containers_patterns.forEach( pattern => {
+            var regex = new RegExp(pattern);
+            if (regex.test(class_name)) {
+                list_of_class_names.remove(class_name);
+            }
+        });
+    });
+
 });
-
-// Find banners by identifier
-var list_of_banners = document.querySelectorAll(`[id*="Cookie"], [id*="cookie"]`);
-
-list_of_banners.forEach(banner => {
-    console.log("element: ", banner)
-    banner.remove();
-});
-
-
-//---------------------------
-//       Didomi popups
-//---------------------------
-
-var didomiHost = document.querySelector('#didomi-host');
-
-if (didomiHost) {
-    didomiHost.remove();
-    if (document.body.classList.contains('didomi-popup-open')){
-        document.body.classList.remove('didomi-popup-open');
-    }
-}
 
 
 //---------------------------
