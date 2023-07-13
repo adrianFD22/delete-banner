@@ -5,13 +5,17 @@
 
 
 //---------------------------
-//      General banners
+//      Remove banners
 //---------------------------
 
 var banner_patterns = ["cookie", "Cookie"];
-var banner_containers_patterns = ["popup"];
+var container_patterns = ["popup"];
+
+var banner_regexps = Array.from(banner_patterns, pattern => new RegExp(pattern), "i");
+var container_regexps = Array.from(container_patterns, pattern => new RegExp(pattern), "i");
 
 var list_of_elements = document.querySelectorAll("body *");
+
 
 list_of_elements.forEach( element => {
 
@@ -23,9 +27,8 @@ list_of_elements.forEach( element => {
     }
 
     // Remove banners by identifier
-    banner_patterns.forEach( pattern => {
-        var regex = new RegExp(pattern);
-        if (regex.test(element.id)) {
+    banner_regexps.forEach( regexps => {
+        if (regexps.test(element.id)) {
             element.remove();
         }
     });
@@ -34,9 +37,8 @@ list_of_elements.forEach( element => {
     var list_of_class_names = element.classList;
 
     list_of_class_names.forEach( class_name => {
-        banner_containers_patterns.forEach( pattern => {
-            var regex = new RegExp(pattern);
-            if (regex.test(class_name)) {
+        container_regexps.forEach( regexp => {
+            if (regexp.test(class_name)) {
                 list_of_class_names.remove(class_name);
             }
         });
